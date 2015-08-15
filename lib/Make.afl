@@ -1,0 +1,14 @@
+export CXX=afl-g++
+export CC=afl-gcc
+
+CXXFLAGS=-std=c++11
+
+all: afl-countgraph
+
+afl/lib/liboxli.a:
+	rm -rf afl/
+	mkdir -p afl/
+	$(MAKE) -f Makefile clean install PREFIX=afl
+
+%: %.cc afl/lib/liboxli.a
+	$(CXX) $(CXXFLAGS) -I afl/include -o $@ $< afl/lib/liboxli.a
